@@ -14,6 +14,8 @@ public class DBConnection
     private Connection conn;			//连接对象
     private String MySqlDriver;			//MYSQL Server驱动程序
     private String MySqlURL; 			//MYSQL Server连接字符串
+    private String MyUser;				//MYSQL Server用户名
+    private String MyPassword;			//MYSQL Server密码
         
    
     public DBConnection()
@@ -57,14 +59,16 @@ public class DBConnection
     	try{
 	 		MySqlDriver = getPara("MySQLDriver");	
 	    	MySqlURL = getPara("MySQLURL");
+	    	MyUser = getPara("MyUser");
+	    	MyPassword = getPara("MyPassword");
 	    	Class.forName(MySqlDriver).newInstance();
-	    	//conn = DriverManager.getConnection(MySqlURL);
-	    	conn3 = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/webdb?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8", "root", "root");
+	    	conn = DriverManager.getConnection(MySqlURL,MyUser,MyPassword);
+	    	//conn3 = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/webdb?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8", "root", "root");
 	    	}catch(Exception e){
 	    		e.printStackTrace();
 		    	System.err.println(e.getMessage());
 	    	}
-	    return conn3;
+	    return conn;
     }       
     
 }
