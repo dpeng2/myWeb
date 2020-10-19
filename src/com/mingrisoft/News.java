@@ -80,5 +80,57 @@ public class News {
 			return "No";                                       // 如果系统异常方法返回字符“No”
 		}
 	}
+	
+	// 新闻内容查询方法
+	public String FrontNewsDetail(String s0) {
+		try {// 捕获系统异常
+			Connection Conn = DBConn.getConn();                      // 建立数据库连接
+			Statement stmt = Conn.createStatement();                 // 创建数据查询
+			ResultSet rs = null;                                     // 定义结果集
+			int NewsID = Fun.StrToInt(s0);                           // 将参数s0进行转换
+			if (NewsID == 0) {                                       // s0判定等于0
+				return "No";                                         // 返回字符“No”
+			} else {                                                 // s0判定不等于0
+				try {
+					// 创建sql语句查询News表全部信息
+					String sql = "select * from News where NewsID=" + NewsID;
+					rs = stmt.executeQuery(sql);                     // 得到执行sql结果
+					// 定义本方法返回字符串数据
+					StringBuffer sb = new StringBuffer();
+					int i = 0;                                       // 定义起始数据
+					// i属性小于页面显示条数并且查询结果集不为空，进行循环方法
+					while (i < 1 && !rs.isAfterLast()) {
+						rs.next();                                   // 判定是否存在
+						// 定义数字型变量并赋值News表里的NewsTitle属性
+						String NewsTitle = rs.getString("NewsTitle");
+						// 定义数字型变量并赋值News表里的NewsContent属性
+						String NewsContent = rs.getString("NewsContent");
+
+						String[] content = NewsContent.split("#");// 以#号进行分割
+						// 返回属性添加字符串数据用于页面显示新闻标题
+						sb.append("<br><h2 style=\"font-size:28px;margin-left:30%\">" 
+	                          + NewsTitle + "</h2>");
+						for (int j = 0; j < content.length; j++) {// 循环
+							// 返回属性添加字符串数据用于页面显示内容信息
+							sb.append("<p>" + content[j] + "</p>");
+						}
+						rs.next();                                   // 判定是否存在
+						i++;                                          // 自动+1
+					}
+					rs.close();                                       // 关闭结果集
+					stmt.close();                                     // 关闭查询
+					Conn.close();                                     // 关闭数据连接
+					return sb.toString();                            // 返回字符串数据
+				} catch (Exception e) {                              // 得到系统运行异常
+					Conn.rollback();                                 // JDBC回滚机制
+					Conn.close();                                    // 关闭数据库连接
+					return "No";                                     // 返回字符串“No”
+				}
+			}
+		} catch (Exception e) {                                       // 得到系统运行异常
+			return "No";                                              // 系统异常后返回字符“No”
+		}
+	}
+
 
 }
