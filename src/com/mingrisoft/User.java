@@ -34,7 +34,7 @@ public class User
      	{
  			
      		Connection Conn = DBConn.getConn();
- 	    	Statement stmt = Conn.createStatement();
+ 	    	Statement stmt = Conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
  	    	ResultSet rs = null;
      		StringBuffer sb = new StringBuffer();
      		
@@ -42,7 +42,7 @@ public class User
  			int intPage = 1; 			
  			int intPageSize = 5;
  			
- 	    	String sSql = "select * from Admin order by AdminID desc";
+ 	    	String sSql = "select * from admin order by AdminID desc";
  	    	rs = stmt.executeQuery(sSql);
  	    	
      		
